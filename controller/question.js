@@ -52,15 +52,69 @@ export const getQuestionsByQuizId = async (req, res) => {
     }
 };
 //get specific Questions
+// export const getQuestionsWithOptionsByQuizId = async (req, res) => {
+//     try {
+//         const quizId = req.params.id;
+
+//         // Retrieve all questions and their options associated with the given quiz
+//         const selectQuestionsAndOptionsSql = `
+//             SELECT q.QuestionID, q.QuestionText, q.QuestionType, o.OptionID, o.OptionText, o.IsCorrect
+//             FROM Questions q
+//             JOIN Options o ON q.QuestionID = o.QuestionID
+//             WHERE q.QuizID = ?
+//             ORDER BY q.QuestionID, o.OptionID
+//         `;
+
+//         const data = await new Promise((resolve, reject) => {
+//             db.all(selectQuestionsAndOptionsSql, [quizId], (err, rows) => {
+//                 if (err) reject(err);
+//                 else resolve(rows);
+//             });
+//         });
+
+//         const questionsWithOptions = [];
+//         let currentQuestion = null;
+
+//         data.forEach((row) => {
+//             if (
+//                 !currentQuestion ||
+//                 row.QuestionID !== currentQuestion.QuestionID
+//             ) {
+//                 currentQuestion = {
+//                     QuestionID: row.QuestionID,
+//                     QuestionText: row.QuestionText,
+//                     QuestionType: row.QuestionType,
+//                     Options: [],
+//                 };
+//                 questionsWithOptions.push(currentQuestion);
+//             }
+
+//             currentQuestion.Options.push({
+//                 OptionID: row.OptionID,
+//                 OptionText: row.OptionText,
+//                 IsCorrect: row.IsCorrect,
+//             });
+//         });
+
+//         res.json(questionsWithOptions);
+//     } catch (error) {
+//         console.error('Error getting questions and options:', error);
+//         res.status(500).send('Internal Server Error');
+//     }
+// };
+
+
+// Modify getQuestionsWithOptionsByQuizId
 export const getQuestionsWithOptionsByQuizId = async (req, res) => {
     try {
         const quizId = req.params.id;
 
-        // Retrieve all questions and their options associated with the given quiz
+        // Retrieve all questions and their options or answers associated with the given quiz
         const selectQuestionsAndOptionsSql = `
-            SELECT q.QuestionID, q.QuestionText, q.QuestionType, o.OptionID, o.OptionText, o.IsCorrect
+            SELECT q.QuestionID, q.QuestionText, q.QuestionType, o.OptionID, o.OptionText, o.IsCorrect, sa.AnswerText
             FROM Questions q
-            JOIN Options o ON q.QuestionID = o.QuestionID
+            LEFT JOIN Options o ON q.QuestionID = o.QuestionID
+            LEFT JOIN ShortAnswers sa ON q.QuestionID = sa.QuestionID
             WHERE q.QuizID = ?
             ORDER BY q.QuestionID, o.OptionID
         `;
@@ -76,24 +130,24 @@ export const getQuestionsWithOptionsByQuizId = async (req, res) => {
         let currentQuestion = null;
 
         data.forEach((row) => {
-            if (
-                !currentQuestion ||
-                row.QuestionID !== currentQuestion.QuestionID
-            ) {
+            if (!currentQuestion || row.QuestionID !== currentQuestion.QuestionID) {
                 currentQuestion = {
                     QuestionID: row.QuestionID,
                     QuestionText: row.QuestionText,
                     QuestionType: row.QuestionType,
                     Options: [],
+                    ShortAnswer: row.AnswerText || null,
                 };
                 questionsWithOptions.push(currentQuestion);
             }
 
-            currentQuestion.Options.push({
-                OptionID: row.OptionID,
-                OptionText: row.OptionText,
-                IsCorrect: row.IsCorrect,
-            });
+            if (row.OptionID) {
+                currentQuestion.Options.push({
+                    OptionID: row.OptionID,
+                    OptionText: row.OptionText,
+                    IsCorrect: row.IsCorrect,
+                });
+            }
         });
 
         res.json(questionsWithOptions);

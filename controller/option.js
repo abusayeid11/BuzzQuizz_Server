@@ -191,3 +191,30 @@ export const deleteOption = async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
+
+
+// Get Short Answer by Question ID
+export const getShortAnswerByQuestionId = async (req, res) => {
+    try {
+        const questionId = req.params.id;
+
+        // Retrieve the short answer associated with the question
+        const selectShortAnswerSql = `SELECT AnswerText FROM ShortAnswers WHERE QuestionID = ?`;
+
+        const shortAnswer = await new Promise((resolve, reject) => {
+            db.get(selectShortAnswerSql, [questionId], (err, row) => {
+                if (err) reject(err);
+                else resolve(row);
+            });
+        });
+
+        if (!shortAnswer) {
+            res.status(404).json({ message: 'No short answer found for the given question' });
+        } else {
+            res.json(shortAnswer);
+        }
+    } catch (error) {
+        console.error('Error getting short answer:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};

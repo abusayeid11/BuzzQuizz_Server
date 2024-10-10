@@ -8,6 +8,8 @@ router.post('/', controller.createOption);
 // Get options by question ID
 router.get('/questions/:id/options', controller.getOptionsByQuestionId);
 
+router.get('/questions/:id/options', controller.getShortAnswerByQuestionId);
+
 // Update an option
 router.put('/:id', controller.updateOption);
 router.get('/quizzes/:id/options', controller.getCorrectOptionsByQuizId);

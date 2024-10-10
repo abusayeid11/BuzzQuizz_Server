@@ -119,6 +119,19 @@ const createSchema = async (db) => {
         `
         );
 
+        await runSql(
+            db,`
+        CREATE TABLE IF NOT EXISTS ShortAnswers (
+            AnswerID INTEGER PRIMARY KEY AUTOINCREMENT,
+            QuestionID INTEGER,
+            AnswerText TEXT,
+            FOREIGN KEY (QuestionID) REFERENCES Questions(QuestionID)
+
+        )
+            `
+        );
+        
+
         // Create UserResponse Table
         await runSql(
             db,
