@@ -20,4 +20,9 @@ router.get(
 // Delete a question
 router.delete('/:id', controller.deleteQuestion);
 
+
+//Get All Questions
+router.get('/all', controller.getAllQuestions);
+
 export default router;
+

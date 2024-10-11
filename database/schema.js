@@ -137,18 +137,19 @@ const createSchema = async (db) => {
             db,
             `
             CREATE TABLE IF NOT EXISTS UserResponse (
-                ResponseID INTEGER PRIMARY KEY AUTOINCREMENT,
-                UserID INTEGER,
-                QuizID INTEGER,
-                QuestionID INTEGER,
-                ChosenOption INTEGER,
-                AnswerText TEXT,
-                IsCorrect BOOLEAN,
-                FOREIGN KEY (UserID) REFERENCES Users(UserID),
-                FOREIGN KEY (QuizID) REFERENCES Quizzes(QuizID),
-                FOREIGN KEY (QuestionID) REFERENCES Questions(QuestionID),
-                FOREIGN KEY (ChosenOption) REFERENCES Options(OptionID)
-            )
+    ResponseID INTEGER PRIMARY KEY AUTOINCREMENT,
+    UserID INTEGER,
+    QuizID INTEGER,
+    QuestionID INTEGER,
+    ChosenOption INTEGER NULL, -- Nullable for short-answer and true/false questions
+    AnswerText TEXT,           -- Used for short-answer and explanations for true/false
+    IsCorrect BOOLEAN,         -- Whether the answer is correct (true/false)
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (QuizID) REFERENCES Quizzes(QuizID),
+    FOREIGN KEY (QuestionID) REFERENCES Questions(QuestionID),
+    FOREIGN KEY (ChosenOption) REFERENCES Options(OptionID)
+);
+
         `
         );
 
