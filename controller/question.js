@@ -218,3 +218,23 @@ export const deleteQuestion = async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
+
+//Get All Questions
+export const getAllQuestions = async (req, res) => {
+    try {
+        const selectQuestionsSql = `SELECT * FROM Questions`;
+
+        const questions = await new Promise((resolve, reject) => {
+            db.all(selectQuestionsSql, (err, rows) => {
+                if (err) reject(err);
+                else resolve(rows);
+            });
+        });
+
+        res.json(questions);
+    } catch (error) {
+        console.error('Error getting questions:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
