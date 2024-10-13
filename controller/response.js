@@ -33,11 +33,23 @@ export const getResponsesbyQuizID = async (req, res) => {
         const quizID = req.params.id;
 
         const sql = `
-            SELECT u.FirstName, u.LastName, q.QuestionText, ur.ChosenOption, ur.AnswerText, ur.IsCorrect
-            FROM UserResponse ur
-            JOIN Users u ON ur.UserID = u.UserID
-            JOIN Questions q ON ur.QuestionID = q.QuestionID
-            WHERE ur.QuizID = ?
+            SELECT 
+    u.FirstName, 
+    u.LastName, 
+    q.QuestionText, 
+    ur.ChosenOption, 
+    ur.AnswerText, 
+    ur.IsCorrect
+FROM 
+    UserResponse ur
+JOIN 
+    Users u ON ur.UserID = u.UserID
+JOIN 
+    Questions q ON ur.QuestionID = q.QuestionID
+LEFT JOIN 
+    Options o ON ur.ChosenOption = o.OptionID  -- Use LEFT JOIN to handle NULL ChosenOption
+WHERE 
+    ur.QuizID = ?;
         `;
 
         db.all(sql, [quizID], (err, rows) => {
