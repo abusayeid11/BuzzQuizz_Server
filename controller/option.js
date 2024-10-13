@@ -77,6 +77,7 @@ export const getCorrectOptionsByQuizId = async (req, res) => {
     }
 };
 
+
 // Get Options by Question ID
 export const getOptionsByQuestionId = async (req, res) => {
     try {
@@ -215,6 +216,25 @@ export const getShortAnswerByQuestionId = async (req, res) => {
         }
     } catch (error) {
         console.error('Error getting short answer:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+//Get All Options
+export const getAllOptions = async (req, res) => {
+    try {
+        const selectOptionsSql = `SELECT * FROM Options`;
+
+        const options = await new Promise((resolve, reject) => {
+            db.all(selectOptionsSql, (err, rows) => {
+                if (err) reject(err);
+                else resolve(rows);
+            });
+        });
+
+        res.json(options);
+    } catch (error) {
+        console.error('Error getting options:', error);
         res.status(500).send('Internal Server Error');
     }
 };

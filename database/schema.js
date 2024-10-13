@@ -119,6 +119,8 @@ const createSchema = async (db) => {
         `
         );
 
+        //table for short answers
+
         await runSql(
             db,`
         CREATE TABLE IF NOT EXISTS ShortAnswers (

@@ -17,4 +17,7 @@ router.get('/quizzes/:id/options', controller.getCorrectOptionsByQuizId);
 // Delete an option
 router.delete('/:id', controller.deleteOption);
 
+// Get all options
+router.get('/', controller.getAllOptions);
+
 export default router;

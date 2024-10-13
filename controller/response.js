@@ -58,10 +58,7 @@ export const getResponsesbyQuizID = async (req, res) => {
 export const getAllResponses = async (req, res) => {
     try {
         const sql = `
-            SELECT ur.ResponseID, u.FirstName, u.LastName, q.QuestionText, ur.ChosenOption, ur.AnswerText, ur.IsCorrect
-            FROM UserResponse ur
-            JOIN Users u ON ur.UserID = u.UserID
-            JOIN Questions q ON ur.QuestionID = q.QuestionID
+            SELECT * FROM UserResponse
         `;
 
         db.all(sql, [], (err, rows) => {
