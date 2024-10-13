@@ -7,7 +7,7 @@ const router = Router();
 router.post("/", controller.submitResponse);
 
 //Get Response by ID
-router.get("/quizzes/:id/responses", controller.getResponsesbyQuizID);
+router.get("/quiz/:id", controller.getResponsesbyQuizID);
 
 //Get All Responses
 router.get("/", controller.getAllResponses);
