@@ -92,3 +92,28 @@ export const getAllResponses = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
+// Delete User Response by responseId
+export const deleteResponseById = async (req, res) => {
+    try {
+        const responseId = req.params.id;
+
+        const deleteResponseSql = `DELETE FROM UserResponse WHERE ResponseID = ?`;
+
+        db.run(deleteResponseSql, [responseId], function (err) {
+            if (err) {
+                console.error('Error deleting response:', err);
+                res.status(500).json({ error: 'Failed to delete response' });
+            } else if (this.changes === 0) {
+                // No rows affected, response not found
+                res.status(404).json({ message: 'Response not found' });
+            } else {
+                res.status(200).json({ message: 'Response deleted successfully' });
+                console.log('Response deleted successfully');
+            }
+        });
+    } catch (error) {
+        console.error('Error deleting response:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};

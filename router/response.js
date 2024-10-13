@@ -12,4 +12,8 @@ router.get("/quiz/:id", controller.getResponsesbyQuizID);
 //Get All Responses
 router.get("/", controller.getAllResponses);
 
+//Delete Response By ID
+router.delete('/:id', controller.deleteResponseById);
+
+
 export default router;
