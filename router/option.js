@@ -5,6 +5,10 @@ const router = Router();
 // Create a new option
 router.post('/', controller.createOption);
 
+//Get optiontext by optionId
+
+router.get('/:id', controller.getOptionTextByOptionId)
+
 // Get options by question ID
 router.get('/questions/:id/options', controller.getOptionsByQuestionId);
 

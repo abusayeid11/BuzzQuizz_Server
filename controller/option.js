@@ -77,6 +77,34 @@ export const getCorrectOptionsByQuizId = async (req, res) => {
     }
 };
 
+// Get OptionText by OptionID
+export const getOptionTextByOptionId = async (req, res) => {
+    try {
+        const optionId = req.params.id;
+
+        // SQL query to get the OptionText based on the provided OptionID
+        const selectOptionTextSql = `SELECT OptionText FROM Options WHERE OptionID = ?`;
+
+        const optionText = await new Promise((resolve, reject) => {
+            db.get(selectOptionTextSql, [optionId], (err, row) => {
+                if (err) reject(err);
+                else if (!row) resolve(null); // If no row found, return null
+                else resolve(row.OptionText);
+            });
+        });
+
+        if (!optionText) {
+            // If no option with the given ID was found, return a 404 response
+            res.status(404).json({ message: 'Option not found' });
+        } else {
+            // Return the found OptionText
+            res.json({ OptionText: optionText });
+        }
+    } catch (error) {
+        console.error('Error getting OptionText:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};
 
 // Get Options by Question ID
 export const getOptionsByQuestionId = async (req, res) => {
