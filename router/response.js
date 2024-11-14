@@ -15,5 +15,7 @@ router.get("/", controller.getAllResponses);
 //Delete Response By ID
 router.delete('/:id', controller.deleteResponseById);
 
+router.get('/teachers', controller.getTeachers)
+
 
 export default router;

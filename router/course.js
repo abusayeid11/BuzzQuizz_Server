@@ -18,4 +18,7 @@ router.put('/:id', controller.updateCourse);
 // Delete a course
 router.delete('/:id', controller.deleteCourse);
 
+
+
+
 export default router;

@@ -117,3 +117,14 @@ export const deleteResponseById = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
+// Get Users by Techer Role
+export const getTeachers = (req, res) => {
+    // Remove any token verification lines for public access
+    db.all(`SELECT * FROM Users WHERE UserRole = 'teacher'`, (err, rows) => {
+        if (err) {
+            return res.status(500).send('Database error');
+        }
+        res.json(rows);
+    });
+};

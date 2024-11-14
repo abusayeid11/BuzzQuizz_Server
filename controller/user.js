@@ -130,6 +130,19 @@ export async function getUserById(req, res) {
     }
 }
 
+
+
+
+export const getAllUser = (req, res) => {
+    // Remove any token verification lines for public access
+    db.all(`SELECT * FROM Users `, (err, rows) => {
+        if (err) {
+            return res.status(500).send('Database error');
+        }
+        res.json(rows);
+    });
+};
+
 export async function getUserId(userId) {
     const sql = `SELECT * FROM Users WHERE UserID = ?`;
     return new Promise((resolve, reject) => {
