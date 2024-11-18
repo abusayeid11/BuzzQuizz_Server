@@ -5,11 +5,11 @@ const db = new sqlite3.Database('./database.db');
 // Create Course
 export const createCourse = async (req, res) => {
     try {
-        const { CourseName, TeacherID } = req.body;
-        const insertCourseSql = `INSERT INTO Courses (CourseName, TeacherID) VALUES (?, ?)`;
+        const { CourseName, description } = req.body;
+        const insertCourseSql = `INSERT INTO Courses (CourseName, description) VALUES (?, ?)`;
 
         const courseId = await new Promise((resolve, reject) => {
-            db.run(insertCourseSql, [CourseName, TeacherID], function (err) {
+            db.run(insertCourseSql, [CourseName, description], function (err) {
                 if (err) reject(err);
                 else resolve(this.lastID);
             });
@@ -71,12 +71,12 @@ export const updateCourse = async (req, res) => {
     try {
         const courseId = req.params.id;
         const { CourseName, TeacherID } = req.body;
-        const updateCourseSql = `UPDATE Courses SET CourseName = ?, TeacherID = ? WHERE CourseID = ?`;
+        const updateCourseSql = `UPDATE Courses SET TeacherID = ? WHERE CourseID = ?`;
 
         const result = await new Promise((resolve, reject) => {
             db.run(
                 updateCourseSql,
-                [CourseName, TeacherID, courseId],
+                [ TeacherID, courseId],
                 function (err) {
                     if (err) reject(err);
                     else resolve(this.changes);

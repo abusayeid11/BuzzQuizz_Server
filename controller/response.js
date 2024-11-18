@@ -128,3 +128,24 @@ export const getTeachers = (req, res) => {
         res.json(rows);
     });
 };
+
+
+export const createCourse = async (req, res) => {
+    try {
+        const { CourseName, description } = req.body;
+        const insertCourseSql = `INSERT INTO Courses (CourseName, description) VALUES (?, ?)`;
+
+        const courseId = await new Promise((resolve, reject) => {
+            db.run(insertCourseSql, [CourseName, description], function (err) {
+                if (err) reject(err);
+                else resolve(this.lastID);
+            });
+        });
+
+        res.status(201).json({ courseId });
+        console.log('Course created successfully');
+    } catch (error) {
+        console.error('Error creating course:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};

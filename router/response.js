@@ -17,5 +17,7 @@ router.delete('/:id', controller.deleteResponseById);
 
 router.get('/teachers', controller.getTeachers)
 
+router.post('/course', controller.createCourse);
+
 
 export default router;
